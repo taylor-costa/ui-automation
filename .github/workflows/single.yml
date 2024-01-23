@@ -1,5 +1,3 @@
- GitHub Actions
-# https://docs.github.com/en/actions/using-workflows
 name: Cypress single taylor tests 
 
 on: workflow_dispatch
