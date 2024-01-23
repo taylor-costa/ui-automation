@@ -8,10 +8,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        ##
+      # Setup PNPM: START
+      # Ideally in the future we can just use:
+      # ```
+      # - uses: pnpm/action-setup@v2
+      #   with:
+      #     version: 8
+      # ```
+      ##
+      - name: Install pnpm
+        run: |
+          eval export $(echo PNPM_HOME=$HOME/.pnpm | tee -a $GITHUB_ENV);
+          echo "$PNPM_HOME" >> $GITHUB_PATH
+          curl -fsSL https://get.pnpm.io/install.sh | bash -
+
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      ##
+      # Setup PNPM: END
+      ##
       - name: Chrome
         uses: cypress-io/github-action@v6
         timeout-minutes: 10
         with:
-          build: npx run build
-          start: npx start
+          build: pnpm run build
+          start: pnpm start
           browser: chrome
